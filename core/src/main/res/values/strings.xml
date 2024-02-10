@@ -1,0 +1,5 @@
+<resources>
+    <string name="title">Title\n</string>
+    <string name="Desc">Description\n</string>
+    <string name="date">Release date\n</string>
+</resources>
