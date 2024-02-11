@@ -20,9 +20,7 @@ class FavoriteActivity : AppCompatActivity() {
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         loadKoinModules(favoriteModule)
-
 
         val movieAdapter = MovieAdapter()
         movieAdapter.onItemClick = {selectedData ->
@@ -31,12 +29,10 @@ class FavoriteActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        favoriteViewModel.favoriteMovie.observe(this) { dataMovie ->
+            movieAdapter.submitList(dataMovie)
+        }
 
-        favoriteViewModel.favoriteMovie.observe(this,{ dataMovie ->
-
-            movieAdapter.setAllMovieList(dataMovie)
-
-        })
 
         with(binding.rvFavorite){
             layoutManager  = LinearLayoutManager(context)

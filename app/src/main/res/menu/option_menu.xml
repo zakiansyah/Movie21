@@ -7,5 +7,10 @@
         android:icon="@drawable/icon_favorite"
         android:title="@string/favorite"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btn_profile"
+        android:icon="@drawable/icon_profile"
+        android:title="@string/favorite"
+        app:showAsAction="ifRoom" />
 
 </menu>

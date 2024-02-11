@@ -9,7 +9,7 @@ class LocalDataSource(private val favDao: MovieDao) {
 
     fun getFavoriteMovie(): Flow<List<MovieEntity>> = favDao.getFavoriteMovie()
 
-    suspend fun insertMovie(MovieList: List<MovieEntity>) =favDao.insertMovie(MovieList)
+    suspend fun insertMovie(movieList: List<MovieEntity>) =favDao.insertMovie(movieList)
 
     fun setFavoriteMovie(movie: MovieEntity, newState: Boolean) {
         movie.isFavorite = newState

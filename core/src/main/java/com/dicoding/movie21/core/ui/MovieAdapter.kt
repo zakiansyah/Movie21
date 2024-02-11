@@ -1,56 +1,24 @@
 package com.dicoding.movie21.core.ui
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.movie21.core.databinding.ItemHomeBinding
 import com.dicoding.movie21.core.domain.model.Movie
-import java.io.InputStream
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter : ListAdapter<Movie, MovieAdapter.ViewHolder>(MovieDiffCallback()) {
 
-    private val movieList = ArrayList<Movie>()
     var onItemClick: ((Movie) -> Unit)? = null
-
-
-    fun setAllMovieList(movieResponse: List<Movie>?) {
-        if (movieResponse != null) {
-            movieList.clear()
-            movieList.addAll(movieResponse)
-            notifyDataSetChanged()
-        }
-    }
-
-    inner class ViewHolder(private val binding: ItemHomeBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        private var loadImageTask: LoadImageTask? = null
-
-        fun bind(allMovie: Movie) {
-            with(binding) {
-                tvItemTitle.text = allMovie.title
-                tvItemDate.text = allMovie.releaseDate
-
-                val imageUrl = "https://image.tmdb.org/t/p/w185/${allMovie.posterPath}"
-                loadImageTask?.cancel(true)
-                loadImageTask = LoadImageTask(imgPoster)
-                loadImageTask?.execute(imageUrl)
-            }
-        }
-
-        init {
-            binding.root.setOnClickListener {
-                onItemClick?.invoke(movieList[adapterPosition])
-            }
-        }
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -58,32 +26,53 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = movieList[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int = movieList.size
+    inner class ViewHolder(private val binding: ItemHomeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    private class LoadImageTask(private val imageView: ImageView) :
-        AsyncTask<String?, Void?, Bitmap?>() {
-        override fun doInBackground(vararg params: String?): Bitmap? {
+        fun bind(movie: Movie) {
+            with(binding) {
+                tvItemTitle.text = movie.title
+                tvItemDate.text = movie.releaseDate
+
+                val imageUrl = "https://image.tmdb.org/t/p/w185/${movie.posterPath}"
+                loadImage(imageUrl, imgPoster)
+            }
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(getItem(adapterPosition))
+            }
+        }
+    }
+
+    private fun loadImage(url: String, imageView: ImageView) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL(params[0])
-                val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-                connection.doInput = true
-                connection.connect()
-                val input: InputStream = connection.inputStream
-                return BitmapFactory.decodeStream(input)
+                val bitmap = withContext(Dispatchers.IO) {
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.connect()
+                    BitmapFactory.decodeStream(connection.inputStream)
+                }
+                withContext(Dispatchers.Main) {
+                    imageView.setImageBitmap(bitmap)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Bitmap?) {
-            if (result != null) {
-                imageView.setImageBitmap(result)
             }
         }
     }
 }
+
+class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem == newItem
+    }
+}
+
+

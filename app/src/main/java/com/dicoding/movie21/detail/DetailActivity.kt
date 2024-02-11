@@ -30,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showDetailMovie(detailMovie: Movie?) {
         detailMovie?.let {
-            binding.tvDeskripsi.text = detailMovie.overview
+            binding.tvDescription.text = detailMovie.overview
             binding.tvTitle.text = detailMovie.title
             binding.tvDate.text = detailMovie.releaseDate
             Glide.with(this@DetailActivity)
@@ -53,7 +53,7 @@ class DetailActivity : AppCompatActivity() {
         if (statusFavorite) {
             binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_favorite))
         } else {
-            binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this, com.dicoding.movie21.core.R.drawable.icon_favorite_border))
+            binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_favorite_border))
         }
     }
 
