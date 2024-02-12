@@ -24,6 +24,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -81,4 +88,8 @@ dependencies {
     //coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //sqlcipher
+    implementation ("net.zetetic:android-database-sqlcipher:4.4.0")
+    implementation ("androidx.sqlite:sqlite-ktx:2.1.0")
 }

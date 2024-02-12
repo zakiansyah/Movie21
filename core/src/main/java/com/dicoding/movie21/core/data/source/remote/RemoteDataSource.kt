@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class RemoteDataSource (private val apiService: ApiService){
-
     suspend fun getAllMovie(): Flow<Result<List<MovieResponse>>> {
         return flow {
             try {
@@ -29,5 +28,4 @@ class RemoteDataSource (private val apiService: ApiService){
             }
         }.flowOn(Dispatchers.IO)
     }
-
 }

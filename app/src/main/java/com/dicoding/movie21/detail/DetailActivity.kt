@@ -17,15 +17,16 @@ class DetailActivity : AppCompatActivity() {
     companion object{
         const val EXTRA_DATA = "EXTRA_DATA"
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.tvRelease.text = getString(R.string.release_date)
+
         val detailMovie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
         showDetailMovie(detailMovie)
-
-
     }
 
     private fun showDetailMovie(detailMovie: Movie?) {

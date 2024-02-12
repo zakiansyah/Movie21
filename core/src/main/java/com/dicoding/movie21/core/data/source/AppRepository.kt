@@ -34,7 +34,6 @@ class AppRepository(
             }
 
             override fun shouldFetch(data: List<com.dicoding.movie21.core.domain.model.Movie>?): Boolean = true
-
         }.asFlow()
 
 
