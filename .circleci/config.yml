@@ -5,9 +5,8 @@ orbs:
 
 jobs:
   build:
-    executor:
-      name: android/android-machine
-      tag: 2024.01.1
+    docker:
+      - image: cimg/android:2023.11.1
     steps:
       - checkout
       - restore_cache:
@@ -15,6 +14,15 @@ jobs:
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
+      - run:
+          name: Create Local Properties
+          command: echo "sdk.dir=$ANDROID_HOME" > local.properties
+      - run:
+          name: Accept Android SDK Licenses
+          command: (yes || true) | sdkmanager --licenses
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
       - save_cache:
           key: 'android-orb-v1-{{ epoch }}'
           paths:
