@@ -6,7 +6,7 @@ plugins {
 }
 android {
     namespace = "com.dicoding.movie21.favorite"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21

@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.dicoding.movie21"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.dicoding.movie21"
