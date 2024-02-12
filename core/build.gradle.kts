@@ -43,11 +43,6 @@ android {
         viewBinding = true
         buildConfig = true
     }
-    configurations.all {
-        resolutionStrategy {
-            force ("androidx.annotation:annotation:1.7.1")
-        }
-    }
 }
 
 dependencies {
