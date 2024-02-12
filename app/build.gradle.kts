@@ -47,6 +47,11 @@ android {
         buildConfig = true
     }
     dynamicFeatures += setOf(":favorite")
+    configurations.all {
+        resolutionStrategy {
+            force ("androidx.annotation:annotation:1.7.1")
+        }
+    }
 }
 
 dependencies {
